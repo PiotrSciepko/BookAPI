@@ -1,6 +1,7 @@
 package pl.coderslab;
 
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 //@Component
+@Service
 public class MemoryBookService {
     private static List<Book> books = new ArrayList<>(Arrays.asList(new Book(1L, "9788324631766", "Thinking in Java", "Bruce Eckel", "Helion", "programming"),
             new Book(2L, "1234567891234", "Pan Tadeusz", "Adam Mickiewicz", "Libro", "classic"),
@@ -22,7 +24,13 @@ public class MemoryBookService {
     }
 
     public Book getBook(long id) {
-        return books.get((int) id - 1);
+        for (Book b : books) {
+            if (b.getId() == id) {
+                int index = books.indexOf(b);
+                return books.get(index);
+            }
+        }
+        return null;
     }
 
     public void addBook(Book book) {
@@ -41,11 +49,9 @@ public class MemoryBookService {
 
     public void updateBook(Book book) {
         Long id = book.getId();
-        System.out.println(id);
         for (Book b : books) {
             if (b.getId() == id) {
                 int index = books.indexOf(b);
-                System.out.println(index);
                 books.set(index, book);
                 break;
             }

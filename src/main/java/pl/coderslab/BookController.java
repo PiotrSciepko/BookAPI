@@ -1,5 +1,6 @@
 package pl.coderslab;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -8,6 +9,13 @@ import java.util.List;
 @RequestMapping("/books")
 public class BookController {
 
+    private final MemoryBookService memoryBookService;
+
+    @Autowired
+    public BookController(MemoryBookService memoryBookService) {
+        this.memoryBookService = memoryBookService;
+    }
+
     @RequestMapping("/helloBook")
     public Book helloBook() {
         return new Book(1L, "9788324631766", "Thinking in Java",
@@ -15,29 +23,29 @@ public class BookController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<Book> listAllBooks(MemoryBookService memoryBookService) {
+    public List<Book> listAllBooks() {
         return memoryBookService.listAllBooks();
     }
 
     @PostMapping("")
-    public List<Book> addBook(MemoryBookService memoryBookService, @RequestBody Book book) {
+    public List<Book> addBook(@RequestBody Book book) {
         memoryBookService.addBook(book);
         return memoryBookService.listAllBooks();
     }
 
     @GetMapping("/{bookId}")
-    public Book getBook(MemoryBookService memoryBookService, @PathVariable("bookId") long bookId) {
+    public Book getBook(@PathVariable("bookId") long bookId) {
         return memoryBookService.getBook(bookId);
     }
 
     @DeleteMapping("/{bookId}")
-    public List<Book> deleteBook(MemoryBookService memoryBookService, @PathVariable("bookId") long bookId) {
+    public List<Book> deleteBook(@PathVariable("bookId") long bookId) {
         memoryBookService.deleteBook(bookId);
         return memoryBookService.listAllBooks();
     }
 
     @PutMapping("")
-    public List<Book> updateBook(MemoryBookService memoryBookService, @RequestBody Book book) {
+    public List<Book> updateBook(@RequestBody Book book) {
         System.out.println("in put");
         memoryBookService.updateBook(book);
         return memoryBookService.listAllBooks();
