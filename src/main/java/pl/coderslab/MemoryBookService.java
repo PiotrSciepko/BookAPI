@@ -45,7 +45,6 @@ public class MemoryBookService {
         books = books.stream()
                 .filter(el -> el.getId() != id)
                 .collect(Collectors.toList());
-        System.out.println(books);
     }
 
     public void updateBook(Book book) {
